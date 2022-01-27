@@ -64,7 +64,7 @@ public class TP1 {
             switch (op) { // Selecionando a opção inserida
 	            case 1 -> CadastroTema(dados, qtemas);
 	            case 2 -> ExcluirTema(dados,qtemas);
-	            case 3 -> {}
+	            case 3 -> BuscaTema(dados, qtemas);
 	            case 4 -> {}
 	            default -> System.out.println("Opção Inválida!");
             }
@@ -138,9 +138,13 @@ public class TP1 {
 		String nome;
 		
 		ler.nextLine();
+		nome = ler.nextLine();
 		
 		for(int i = 0; i < qtemas; i++) {
-			
+			if(dados[i][0].equalsIgnoreCase(nome)) {
+				System.out.println("Tema -> " + dados[i][0]);
+				break;
+			} else System.out.println("Tema não encontrado");
 		}
 	}
 	
