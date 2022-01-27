@@ -23,7 +23,7 @@ public class TP1 {
 			System.out.print("Opção -> ");
             op = ler.nextInt();
             switch (op) { // Selecionando a opção inserida
-	            case 1 -> GerenciarTemas(dados,qtemas,qpalavras);
+	            case 1 -> GerenciarTemas(dados,qtemas);
 	            case 2 -> GerenciarPalavras();
 	            case 3 -> Jogar();
 	            case 4 -> System.out.println("Obrigado por usar o sitema. Fechando...");
@@ -46,7 +46,7 @@ public class TP1 {
 
     }
 	
-	public static void GerenciarTemas(String[][] dados, int qtemas, int[] qpalavras) {
+	public static void GerenciarTemas(String[][] dados, int qtemas) {
 		
 		
 		int op;
@@ -89,7 +89,7 @@ public class TP1 {
 					repetido = true;
 					System.out.println("\n Tema ja cadastrado. Cadastre um Tema diferente.\n");
 					break;
-				}else repetido = false;
+				}
 			}
 		}while(repetido);
 		
@@ -109,7 +109,7 @@ public class TP1 {
 		
 		ler.nextLine();
 		
-		System.out.print("Nome do Tema: ");
+		System.out.print("Nome do Tema que sera excluído: ");
 		nome = ler.nextLine();
 			
 		for (i = 0; i < qtemas; i++) {
@@ -131,6 +131,7 @@ public class TP1 {
 				if(qtemas - 1 == j ) dados[j][0] = null;
 				else dados[j][0] = dados[j+1][0];
 			}
+			System.out.println("Tema excluído com sucesso");
 		}	
 	}
 	
@@ -148,9 +149,111 @@ public class TP1 {
 		}
 	}
 	
-	public static void GerenciarPalavras() {
+	public static void GerenciarPalavras(String[][] dados, int qtemas, int[] qpalavras) {
+		int op;
+		
+		do {
+			System.out.println("\n\t\t========= Gerenciar Palavras ========");
+	        System.out.println("\t\t|     1 - Cadastro                  |");
+	        System.out.println("\t\t|     2 - Exclusao                  |");
+	        System.out.println("\t\t|     3 - Busca                     |");
+	        System.out.println("\t\t|     4 - Listagem                  |");
+	        System.out.println("\t\t|     5 - Voltar                    |");
+	        System.out.println("\t\t=====================================\n");
+        
+        
+			System.out.print("Opção -> ");
+            op = ler.nextInt();
+            switch (op) { // Selecionando a opção inserida
+	            case 1 -> CadastroPalavra( dados, qtemas,  qpalavras);
+	            case 2 -> {}
+	            case 3 -> {}
+	            case 4 -> {}
+	            case 5 -> {}
+	            default -> System.out.println("Opção Inválida!");
+            }
+            
+		}while(op != 4);
 		
 	}
+	
+public static void CadastroPalavra(String[][] dados, int qtemas, int[] qpalavras) {
+		
+		String nomeTema, palavra;
+		boolean repetido = false;
+		boolean nTema = true;
+		int i;
+		
+		ler.nextLine();
+		
+		do {
+			System.out.println("Digite nome do tema em que a palavra será cadastrada.\nNome do Tema: ");
+			nomeTema = ler.nextLine();
+			
+			for ( i = 0; i < qtemas; i++) {
+				if(dados[i][0].equalsIgnoreCase(nomeTema)) {
+					nTema = true;
+					break;
+				}
+			}
+			
+			if(nTema) {
+				System.out.println("Tema não encontrado. Digite um tema existente");
+			}
+		}while(nTema);
+		
+		do {
+			
+			System.out.println("Digite a palavra: ");
+			palavra = ler.nextLine();
+			
+			for (int j = 1; j < qpalavras[i]; j++) {
+				if(dados[i][j].equalsIgnoreCase(palavra)) {
+					repetido = true;
+					System.out.println("\n Palavra ja cadastrado. Cadastre uma Palavra diferente.\n");
+					break;
+				}
+			}
+		}while(repetido);
+		
+		dados[i][qpalavras[i]] = palavra;
+		qpalavras[i]++;
+		
+		System.out.println("\nPalavra cadastrado com sucesso\n");
+		
+		
+	}
+
+public static void ExcluirPalavra(String[][] dados, int qtemas, int[] qpalavras) {
+	String nome;
+	int i;
+	int j = 1;
+	boolean achei = false;
+	
+	ler.nextLine();
+	
+	System.out.print("Palavra que será excluída: ");
+	nome = ler.nextLine();
+		
+	for (i = 0; i < qtemas; i++) {
+		for(j = 1; j < qpalavras[i]; j++) {
+			if(dados[i][j].equalsIgnoreCase(nome)) {
+				achei = true;
+				break;
+			}
+		}
+	}	
+	
+	if(!achei) { 
+		System.out.println("Palavra não encontrado.\n");
+	}else {
+		for(int k = j; k < qtemas; k++) {
+			if(qpalavras[i] - 1 == k ) dados[i][k] = null;
+			else dados[i][k] = dados[i][k+1];
+		}
+		System.out.println("Palavra excluída com sucesso.\n");
+	}	
+}
 
 	public static void Jogar() {
 	
