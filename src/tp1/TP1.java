@@ -1,6 +1,7 @@
 package tp1;
 
 import java.util.Scanner;
+import java.util.Random;
 
 public class TP1 {
 	
@@ -25,7 +26,7 @@ public class TP1 {
             switch (op) { // Selecionando a opção inserida
 	            case 1 -> GerenciarTemas(dados,qtemas,qpalavras);
 	            case 2 -> GerenciarPalavras(dados,qtemas,qpalavras);
-	            case 3 -> Jogar();
+	            case 3 -> Jogar(dados,qtemas,qpalavras);
 	            case 4 -> System.out.println("Obrigado por usar o sitema. Fechando...");
 	            case 5 -> Imprimir( dados,qtemas,qpalavras);
 	            default -> System.out.println("Opção Inválida!");
@@ -119,7 +120,6 @@ public class TP1 {
 					System.out.println("Não foi possível excluir o tema. "
 							+ "\nVerifique se existem palavras cadastradas nesse tema.");
 					cheio = true;
-					break;
 				}
 				break;
 			}	
@@ -141,6 +141,7 @@ public class TP1 {
 	
 	public static void BuscaTema(String[][] dados, int qtemas) {
 		String nome;
+		boolean achei = false;
 		
 		ler.nextLine();
 		System.out.println("Digite o nome do tema que quer buscar: ");
@@ -149,8 +150,12 @@ public class TP1 {
 		for(int i = 0; i < qtemas; i++) {
 			if(dados[i][0].equalsIgnoreCase(nome)) {
 				System.out.println("Tema -> " + dados[i][0]);
+				achei = true;
 				break;
-			} else System.out.println("Tema não encontrado");
+			}
+		}
+		if(!achei) {
+			System.out.println("Palavra não encontrada");
 		}
 	}
 	
@@ -182,7 +187,7 @@ public class TP1 {
 		
 	}
 	
-public static void CadastroPalavra(String[][] dados, int qtemas, int[] qpalavras) {
+	public static void CadastroPalavra(String[][] dados, int qtemas, int[] qpalavras) {
 		
 		String nomeTema, palavra;
 		boolean repetido = false;
@@ -229,7 +234,7 @@ public static void CadastroPalavra(String[][] dados, int qtemas, int[] qpalavras
 		
 	}
 
-public static void ExcluirPalavra(String[][] dados, int qtemas, int[] qpalavras) {
+	public static void ExcluirPalavra(String[][] dados, int qtemas, int[] qpalavras) {
 	String nome;
 	int i;
 	int j = 1;
@@ -260,24 +265,30 @@ public static void ExcluirPalavra(String[][] dados, int qtemas, int[] qpalavras)
 	}	
 }
 
-public static void BuscaPalavra(String[][] dados, int qtemas, int[] qpalavras) {
-	String nome;
-	
-	ler.nextLine();
-	System.out.println("Digite a palavra que quer buscar: ");
-	nome = ler.nextLine();
-	
-	for(int i = 0; i < qtemas; i++) {
-		for(int j = 1; j < qpalavras[i]; j++) {
-			if(dados[i][j].equalsIgnoreCase(nome)) {
-				System.out.println("Palavra encontrada no tema " + dados[i][0]);
-				break;
-			} else System.out.println("Palavra não encontrada");
+	public static void BuscaPalavra(String[][] dados, int qtemas, int[] qpalavras) {
+		String nome;
+		boolean achei = false;
+		
+		ler.nextLine();
+		System.out.println("Digite a palavra que quer buscar: ");
+		nome = ler.nextLine();
+		
+		for(int i = 0; i < qtemas; i++) {
+			for(int j = 1; j < qpalavras[i]; j++) {
+				if(dados[i][j].equalsIgnoreCase(nome)) {
+					System.out.println("Palavra encontrada no tema " + dados[i][0]);
+					achei = true;
+					break;
+				}
+			}
 		}
+		if(!achei) {
+			System.out.println("Palavra não encontrada");
+		}
+		
 	}
-}
 
-public static void Listagem(String[][] dados, int qtemas, int[] qpalavras) {
+	public static void Listagem(String[][] dados, int qtemas, int[] qpalavras) {
 	String tema;
 	
 	System.out.print("Digite o tema que quer listar as palavras: ");
@@ -296,7 +307,67 @@ public static void Listagem(String[][] dados, int qtemas, int[] qpalavras) {
 	
 }
 
-	public static void Jogar() {
+	public static void Jogar(String[][] dados, int qtemas, int[] qpalavras) {
+		
+		int op;
+		String tema,palavra;
+		boolean achei = false;
+		boolean acertou = false;
+		Random gerador = new Random();
+		int p, tamanho;
+		int erros = 0;
+		int acertos = 0;
+		char letra;
+		
+		ler.nextLine();
+		System.out.print("Seleciona um tema para jogar: ");
+		tema = ler.nextLine();
+		ler.nextLine();
+		
+		for(int i = 0; i < qtemas; i++) {
+			if(dados[i][0].equalsIgnoreCase(tema)) {
+				p = gerador.nextInt(qpalavras[i]-2) + 1;
+				tamanho = dados[i][p].length();
+				palavra = dados[i][p];
+				do {
+					acertou = false;
+					System.out.println("Digite a letra: ");
+					letra = ler.next().charAt(0);
+					for(int j = 0 ;j < tamanho ; j++) {
+						if(palavra.matches("(.*)"+letra+"(.*)")) {
+							acertou = true;
+							acertos++;
+						}
+					}
+					if(!acertou) erros++;
+					
+				}while(erros < 5 || acertos >= tamanho);
+				
+				if(erros == 5) System.out.println("Você perdeu!Deseja jogar novamente? ");
+				else if(acertos >= tamanho) System.out.println("Parabéns!\n"
+						+ "Você acertou a palavra! Deseja jogar novamente? ");
+				
+				do {
+					System.out.println("\n\t\t=========== Jogar =========");
+			        System.out.println("\t\t|     1 - Jogar novamente    |");
+			        System.out.println("\t\t|     2 - Sair               |");
+			        System.out.println("\t\t=============================\n");
+		        
+		        
+					System.out.print("Opção -> ");
+		            op = ler.nextInt();
+		            switch (op) { // Selecionando a opção inserida
+			            case 1 -> Jogar(dados,qtemas,qpalavras);
+			            case 2 -> {}
+			            default -> System.out.println("Opção Inválida!");
+		            }
+				}while(op != 2);
+				break;
+			}
+		}
+		if(!achei) {
+			System.out.println("Tema não cadastrado");
+		}
 	
 }
 	public static void Preencher(String[][] dados, int[] qpalavras) {
